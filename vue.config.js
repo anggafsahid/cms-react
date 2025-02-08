@@ -17,3 +17,10 @@ module.exports = {
     },
   },
 };
+
+
+module.exports = {
+  devServer: {
+    proxy: 'https://cms-headless-production.up.railway.app',
+  },
+};
