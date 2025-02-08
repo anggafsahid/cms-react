@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_BASE_URL = "cms-headless-production.up.railway.app/api";
+const API_BASE_URL = "https://cms-headless-production.up.railway.app/api";
 
 export const getPages = async () => {
   try {
