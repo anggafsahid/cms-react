@@ -1,6 +1,7 @@
 <template>
   <div>
-    <h1>Dashboard</h1>
+    <h1 class="text-center mb-4">Welcome to CMS</h1>
+
     <div class="summary-container">
       <div class="summary" @click="navigateTo('pages')">
         <h2>Pages</h2>
