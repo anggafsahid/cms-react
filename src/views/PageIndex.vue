@@ -58,7 +58,7 @@ export default {
     // Fetch data from the external API
     async fetchData() {
       try {
-        const response = await fetch('https://cms-headless-production.up.railway.app/api/pages');  // Replace with your API URL
+        const response = await fetch(`${process.env.VUE_APP_API_URL}/api/pages`);  // Replace with your API URL
         const result = await response.json();
         
         // Store the fetched data in the component's data property
