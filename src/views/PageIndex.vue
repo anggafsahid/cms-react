@@ -13,12 +13,18 @@
     <!-- Pages List -->
     <div v-else class="row">
       <div
-        v-for="page in pages"
+        v-for="page in data"
         :key="page.id"
         class="col-md-4 mb-4"
       >
         <div class="card h-100 shadow-lg rounded">
-          <img :src="page.media" alt="Banner" class="card-img-top thumbnail" />
+          <img
+            v-if="page.media"
+            :src="page.media"
+            alt="Banner"
+            class="card-img-top thumbnail"
+          />
+          <div v-else class="card-img-top thumbnail bg-secondary"></div> <!-- Fallback for missing media -->
           <div class="card-body">
             <h5 class="card-title">{{ page.title }}</h5>
             <!-- Stripped and truncated content -->
@@ -36,31 +42,39 @@
 </template>
 
 <script>
-import { ref, onMounted } from "vue";
-import { getPages } from "../services/api";
-
 export default {
-  setup() {
-    const pages = ref([]);
-    const loading = ref(true);
-    const error = ref(null);
-
-    // Method to strip HTML tags
-    const stripHtmlTags = (text) => {
-      return text.replace(/<\/?[^>]+(>|$)/g, ""); // Regular expression to remove HTML tags
+  data() {
+    return {
+      data: [],    // Store the fetched data
+      loading: true,  // Track the loading state
+      error: null,  // Store any error that occurs during fetching
     };
-
-    onMounted(async () => {
+  },
+  mounted() {
+    // Fetch data when the component is mounted
+    this.fetchData();
+  },
+  methods: {
+    // Fetch data from the external API
+    async fetchData() {
       try {
-        pages.value = await getPages();
-      } catch (err) {
-        error.value = "Failed to load pages";
+        const response = await fetch('https://cms-headless-production.up.railway.app/api/pages');  // Replace with your API URL
+        const result = await response.json();
+        
+        // Store the fetched data in the component's data property
+        this.data = result.data;
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        this.error = 'Failed to load pages';  // Set error message
       } finally {
-        loading.value = false;
+        this.loading = false;  // Set loading to false after data is fetched
       }
-    });
+    },
 
-    return { pages, loading, error, stripHtmlTags };
+    // Method to strip HTML tags from a string
+    stripHtmlTags(text) {
+      return text.replace(/<\/?[^>]+(>|$)/g, "");  // Regular expression to remove HTML tags
+    },
   },
 };
 </script>
